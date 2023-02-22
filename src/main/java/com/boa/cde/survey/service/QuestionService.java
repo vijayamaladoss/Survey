@@ -39,4 +39,10 @@ public class QuestionService {
     public void deleteQuestionById(Long id) {
         questionRepository.deleteById(id);
     }
+
+    public List<Question> findAllQuestionsWithAnswerOptions() {
+        return questionRepository.findAllQuestionsWithAnswerOptions();
+    }
+
+
 }

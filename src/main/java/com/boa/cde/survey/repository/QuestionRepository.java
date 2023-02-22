@@ -16,4 +16,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("SELECT q FROM Question q JOIN q.category c")
     List<Question> findAllQuestions();
+
+    //Eagerly g
+    @Query("SELECT q FROM Question q LEFT JOIN FETCH q.answerOptions")
+    List<Question> findAllQuestionsWithAnswerOptions();
 }

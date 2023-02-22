@@ -1,4 +1,4 @@
-package com.boa.cde.survey;
+package com.boa.cde.survey.service;
 
 import com.boa.cde.survey.domain.Category;
 import com.boa.cde.survey.service.CategoryService;
