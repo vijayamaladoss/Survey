@@ -5,6 +5,8 @@ import com.boa.cde.survey.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,6 +18,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
+/**
+ * @AutoConfigureTestDatabase is a Spring Boot annotation used in integration tests to configure and
+ * customize the test database. By default, when running integration tests, Spring Boot creates an
+ * in-memory H2 database for testing.
+ * The replace = Replace.NONE parameter tells Spring Boot to use the specified database and not
+ * replace it with the default in-memory database
+ */
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest
 public class CategoryServiceTest {
     @Autowired

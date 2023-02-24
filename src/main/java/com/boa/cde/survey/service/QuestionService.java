@@ -16,8 +16,18 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public Question createQuestion(Question question) {
+    @Autowired
+    private AnswerOptionService answerOptionService;
+
+    public Question createQuestion(Question question){
         return questionRepository.save(question);
+    }
+
+    public Question createQuestionWithDependentAnswerOption(Question question, String answerOptionName){
+        AnswerOption option = answerOptionService.getAnswerOptionByText(answerOptionName);
+        question.setDependentAnswerOption(option);
+        return questionRepository.save(question);
+
     }
 
     public Question getQuestionById(Long id) {

@@ -15,9 +15,14 @@ public class AnswerOptionService {
     @Autowired
     private AnswerOptionRepository answerOptionRepository;
 
-    public AnswerOption getAnswerOptionById(Long id) {
+    public AnswerOption getAnswerOptionById(Long id){
         return answerOptionRepository.findById(id).orElse(null);
     }
+
+    public AnswerOption getAnswerOptionByText(String name){
+        return answerOptionRepository.findByText(name);
+    }
+
 
     public List<AnswerOption> getAllAnswerOptions() {
         return answerOptionRepository.findAll();

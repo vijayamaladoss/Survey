@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface AnswerOptionRepository extends JpaRepository<AnswerOption, Long> {
     List<AnswerOption> findByQuestion(Question question);
+    
+    AnswerOption findByText(String text);
 }
