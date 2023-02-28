@@ -1,4 +1,4 @@
-package com.boa.cde.survey.domain;
+package com.boa.cde.survey.entity;
 
 import lombok.*;
 

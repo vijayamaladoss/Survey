@@ -1,6 +1,6 @@
 package com.boa.cde.survey.service;
 
-import com.boa.cde.survey.domain.AnswerOption;
+import com.boa.cde.survey.entity.AnswerOption;
 import com.boa.cde.survey.repository.AnswerOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,8 @@ public class AnswerOptionService {
     }
 
     public AnswerOption getAnswerOptionByText(String name){
-        return answerOptionRepository.findByText(name);
+        return answerOptionRepository.findByAnswerText(name);
     }
-
 
     public List<AnswerOption> getAllAnswerOptions() {
         return answerOptionRepository.findAll();

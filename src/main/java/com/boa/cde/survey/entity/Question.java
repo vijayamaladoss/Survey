@@ -1,4 +1,4 @@
-package com.boa.cde.survey.domain;
+package com.boa.cde.survey.entity;
 
 
 import lombok.*;
@@ -19,7 +19,15 @@ public class Question {
     private Long id;
 
     @Column(nullable = false)
-    private String text;
+    private String questionText;
+
+    @Column(nullable = false)
+    private Boolean hasQuestionDependent;
+
+    private String choiceRenderType;
+
+    @Column(nullable = false)
+    private Boolean isScoring;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +38,7 @@ public class Question {
     private List<AnswerOption> answerOptions = new ArrayList<>();
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private AnswerOption dependentAnswerOption;
 
 }

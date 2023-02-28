@@ -1,7 +1,7 @@
 package com.boa.cde.survey.controller;
 
-import com.boa.cde.survey.domain.Question;
-import com.boa.cde.survey.dto.QuestionDto;
+import com.boa.cde.survey.entity.Question;
+import com.boa.cde.survey.dto.QuestionDTO;
 import com.boa.cde.survey.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +19,10 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/all")
-    public List<QuestionDto> getAllQuestionsWithAnswerOptions() {
+    public List<QuestionDTO> getAllQuestionsWithAnswerOptions() {
         List<Question> questions = questionService.findAllQuestionsWithAnswerOptions();
-        List<QuestionDto> questionDtos = questions.stream()
-                .map(question -> new QuestionDto(question))
+        List<QuestionDTO> questionDtos = questions.stream()
+                .map(question -> new QuestionDTO(question))
                 .collect(Collectors.toList());
         return questionDtos;
     }

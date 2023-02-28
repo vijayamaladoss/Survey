@@ -1,20 +1,24 @@
 package com.boa.cde.survey;
 
-import com.boa.cde.survey.domain.AnswerOption;
-import com.boa.cde.survey.domain.Category;
-import com.boa.cde.survey.domain.Question;
+import com.boa.cde.survey.dto.CategoryDTO;
+import com.boa.cde.survey.dto.QuestionDTO;
+import com.boa.cde.survey.entity.AnswerOption;
+import com.boa.cde.survey.entity.Category;
+
+import com.boa.cde.survey.entity.Question;
 import com.boa.cde.survey.service.AnswerOptionService;
 import com.boa.cde.survey.service.CategoryService;
 import com.boa.cde.survey.service.QuestionService;
+import com.boa.cde.survey.service.SurveyService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SpringBootApplication
 public class SurveyApplication implements CommandLineRunner {
@@ -28,25 +32,34 @@ public class SurveyApplication implements CommandLineRunner {
     @Autowired
     private AnswerOptionService answerOptionService;
 
+    @Autowired
+    private SurveyService surveyService;
+
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        return modelMapper;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(SurveyApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Random random = new Random();
 
         Category category = new Category();
-        category.setName("Architecture");
+        category.setName("Prequiste");
         Category result  = categoryService.createCategory(category);
         System.out.println("Category Created ==> " + result.getId());
         System.out.println("Category ToString ==> " + result.toString());
 
-        Question question1 = Question.builder().category(category).text("What is Technology Stack?").
-                build();
-        AnswerOption option1 = AnswerOption.builder().text("Java").build();
-        AnswerOption option2 = AnswerOption.builder().text("Dotnet").build();
-        AnswerOption option3 = AnswerOption.builder().text("Python").build();
+        Question question1 = Question.builder().category(category).questionText("What is Technology Stack?").
+                isScoring(Boolean.FALSE).hasQuestionDependent(Boolean.TRUE).build();
+        AnswerOption option1 = AnswerOption.builder().answerText("Java").build();
+        AnswerOption option2 = AnswerOption.builder().answerText("Dotnet").build();
+        AnswerOption option3 = AnswerOption.builder().answerText("Python").build();
 
         option1.setQuestion(question1);
         option2.setQuestion(question1);
@@ -58,13 +71,33 @@ public class SurveyApplication implements CommandLineRunner {
         Question result2 = questionService.createQuestion(question1);
         System.out.println("Question1 result ID== > " + result2.getId());
         System.out.println("Question1 ToString ==> " + result2.toString());
-        //System.out.println("Option1 ToString ==> " + option1.toString());
-        Long dependentAnswerJavaID = option1.getId();
 
-        AnswerOption yesOpt = AnswerOption.builder().text("Yes").build();
-        AnswerOption noOpt = AnswerOption.builder().text("No").build();
-        Question question2 = Question.builder().category(category).text("Does the application use DMZ?").
-                build();
+        Question question3 = Question.builder().category(category).questionText("What is Version of Java Used?").
+                isScoring(Boolean.FALSE).hasQuestionDependent(Boolean.FALSE).build();
+        AnswerOption optionJ1 = AnswerOption.builder().answerText("Java 1.8").isDefault(Boolean.TRUE).build();
+        AnswerOption optionJ2 = AnswerOption.builder().answerText("Java 11").build();
+        AnswerOption optionJ3 = AnswerOption.builder().answerText("Java 17").build();
+        optionJ1.setQuestion(question3);
+        optionJ2.setQuestion(question3);
+        optionJ3.setQuestion(question3);
+        List javaVersionList = new ArrayList<AnswerOption>();
+        Collections.addAll(javaVersionList, optionJ1, optionJ2, optionJ3);
+        question3.setAnswerOptions(javaVersionList);
+        Question result4 = questionService.createQuestionWithDependentAnswerOption(question3, "Java");
+        System.out.println("Question3 result ID ==> " + result4.getId());
+        System.out.println("Question3 ToString ==> " + result4.toString());
+
+
+        Category category2 = new Category();
+        category2.setName("Architecture");
+        Category catResult  = categoryService.createCategory(category2);
+        System.out.println("Architecture Category Created ==> " + catResult.getId());
+        System.out.println("Category ToString ==> " + catResult.toString());
+
+        AnswerOption yesOpt = AnswerOption.builder().answerText("Yes").isDefault(Boolean.FALSE).build();
+        AnswerOption noOpt = AnswerOption.builder().answerText("No").build();
+        Question question2 = Question.builder().category(catResult).questionText("Does the application use DMZ?")
+                .isScoring(Boolean.TRUE).hasQuestionDependent(Boolean.FALSE).build();
         yesOpt.setQuestion(question2);
         noOpt.setQuestion(question2);
         List yesNoList = new ArrayList<AnswerOption>();
@@ -75,38 +108,23 @@ public class SurveyApplication implements CommandLineRunner {
         System.out.println("Question2 result ID ==> " + result3.getId());
         System.out.println("Question2 ToString ==> " + result3.toString());
 
-        Question question3 = Question.builder().category(category).text("What is Version of Java Used?").
-                build();
-        AnswerOption optionJ1 = AnswerOption.builder().text("Java 1.8").build();
-        AnswerOption optionJ2 = AnswerOption.builder().text("Java 11").build();
-        AnswerOption optionJ3 = AnswerOption.builder().text("Java 17").build();
-        optionJ1.setQuestion(question3);
-        optionJ2.setQuestion(question3);
-        optionJ3.setQuestion(question3);
-        List javaVersionList = new ArrayList<AnswerOption>();
-        Collections.addAll(javaVersionList, yesOpt, noOpt);
-        question3.setAnswerOptions(javaVersionList);
-//        AnswerOption javaOption = answerOptionService.getAnswerOptionById(dependentAnswerJavaID);
-//        question3.setDependentAnswerOption(javaOption);
-        Question result4 = questionService.createQuestionWithDependentAnswerOption(question3, "Java");
-        System.out.println("Question3 result ID ==> " + result4.getId());
-        System.out.println("Question3 ToString ==> " + result4.toString());
+        AnswerOption yesOpt1 = AnswerOption.builder().answerText("Yes").isDefault(Boolean.TRUE).build();
+        AnswerOption noOpt1 = AnswerOption.builder().answerText("No").build();
+        Question questionNAS = Question.builder().category(catResult).questionText("Does the application use NAS?")
+                .isScoring(Boolean.TRUE).hasQuestionDependent(Boolean.FALSE).build();
+        yesOpt1.setQuestion(questionNAS);
+        noOpt1.setQuestion(questionNAS);
+        List yesNoList1 = new ArrayList<AnswerOption>();
+        Collections.addAll(yesNoList1, yesOpt1, noOpt1);
+        questionNAS.setAnswerOptions(yesNoList1);
+        questionNAS.setDependentAnswerOption(null);
+        Question resultNAS = questionService.createQuestion(questionNAS);
+        System.out.println("Question2 result ID ==> " + resultNAS.getId());
+        System.out.println("Question2 ToString ==> " + resultNAS.toString());
 
-        List<Question> questionList = questionService.getDependentQuestionsByAnswerOption(option1);
-        System.out.println("QuestionList toString ==> " + questionList);
-
-
-
-
-
-
-//        Question question3 = Question.builder().category(category).text("Does the application use NAS?").
-//                answerOptions(yesNoList).dependentAnswerOption(null).build();
-//        Question result4 = questionService.createQuestion(question3);
-//        System.out.println("Question3 result ID ==> " + result4.getId());
-//        System.out.println("Question3 ToString ==> " + result4.toString());
-
-
+        ObjectMapper mapper = new ObjectMapper();
+        List<CategoryDTO> categoryDTOList = surveyService.getAllQuestionAndAnswerOptions();
+        System.out.println(mapper.writeValueAsString(categoryDTOList));
 
 
     }

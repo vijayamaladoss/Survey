@@ -1,8 +1,9 @@
 package com.boa.cde.survey.service;
 
-import com.boa.cde.survey.domain.AnswerOption;
-import com.boa.cde.survey.domain.Category;
-import com.boa.cde.survey.domain.Question;
+import com.boa.cde.survey.entity.AnswerOption;
+import com.boa.cde.survey.entity.Category;
+import com.boa.cde.survey.entity.Question;
+import com.boa.cde.survey.repository.AnswerOptionRepository;
 import com.boa.cde.survey.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,17 +18,16 @@ public class QuestionService {
     private QuestionRepository questionRepository;
 
     @Autowired
-    private AnswerOptionService answerOptionService;
+    private AnswerOptionRepository answerOptionRepository;
 
     public Question createQuestion(Question question){
         return questionRepository.save(question);
     }
 
     public Question createQuestionWithDependentAnswerOption(Question question, String answerOptionName){
-        AnswerOption option = answerOptionService.getAnswerOptionByText(answerOptionName);
+        AnswerOption option = answerOptionRepository.findByAnswerText(answerOptionName);
         question.setDependentAnswerOption(option);
         return questionRepository.save(question);
-
     }
 
     public Question getQuestionById(Long id) {
@@ -38,7 +38,7 @@ public class QuestionService {
         return questionRepository.findAllQuestions();
     }
 
-    public List<Question> getAllQuestionsBySurvey(Category category) {
+    public List<Question> getAllQuestionsByCategory(Category category) {
         return questionRepository.findByCategory(category);
     }
 
@@ -52,6 +52,10 @@ public class QuestionService {
 
     public List<Question> findAllQuestionsWithAnswerOptions() {
         return questionRepository.findAllQuestionsWithAnswerOptions();
+    }
+
+    public List<Question> findAllQuestions() {
+        return questionRepository.findAllQuestions();
     }
 
 

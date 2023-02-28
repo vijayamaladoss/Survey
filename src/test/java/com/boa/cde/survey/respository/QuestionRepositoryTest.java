@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.boa.cde.survey.domain.AnswerOption;
-import com.boa.cde.survey.domain.Category;
-import com.boa.cde.survey.domain.Question;
+import com.boa.cde.survey.entity.AnswerOption;
+import com.boa.cde.survey.entity.Category;
+import com.boa.cde.survey.entity.Question;
 import com.boa.cde.survey.repository.QuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,12 @@ public class QuestionRepositoryTest {
 
         // Create a new question
         Question question = new Question();
-        question.setText("Test Question");
+        question.setQuestionText("Test Question");
         question.setCategory(category);
 
         // Create a new answer option
         AnswerOption answerOption = new AnswerOption();
-        answerOption.setText("Test Answer Option");
+        answerOption.setAnswerText("Test Answer Option");
         answerOption.setQuestion(question);
         //answerOption.setDependentQuestion(true);
 
@@ -54,17 +54,17 @@ public class QuestionRepositoryTest {
     public void testUpdateQuestion() {
         // Create a new question
         Question question = new Question();
-        question.setText("Test Question");
+        question.setQuestionText("Test Question");
         question = questionRepository.save(question);
 
         // Update the question
-        question.setText("Updated Test Question");
+        question.setQuestionText("Updated Test Question");
         questionRepository.save(question);
 
         // Check that the question was updated correctly
         Question updatedQuestion = questionRepository.findById(question.getId()).orElse(null);
         assertNotNull(updatedQuestion);
-        assertEquals("Updated Test Question", updatedQuestion.getText());
+        assertEquals("Updated Test Question", updatedQuestion.getQuestionText());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class QuestionRepositoryTest {
     public void testDeleteQuestion() {
         // Create a new question
         Question question = new Question();
-        question.setText("Test Question");
+        question.setQuestionText("Test Question");
         question = questionRepository.save(question);
 
         // Delete the question
@@ -87,11 +87,11 @@ public class QuestionRepositoryTest {
     public void testFindAllQuestions() {
         // Create some test data
         Question question1 = new Question();
-        question1.setText("Test Question 1");
+        question1.setQuestionText("Test Question 1");
         questionRepository.save(question1);
 
         Question question2 = new Question();
-        question2.setText("Test Question 2");
+        question2.setQuestionText("Test Question 2");
         questionRepository.save(question2);
 
         // Find all questions
@@ -108,7 +108,7 @@ public class QuestionRepositoryTest {
     public void testFindQuestionById() {
         // Create a new question
         Question question = new Question();
-        question.setText("Test Question");
+        question.setQuestionText("Test Question");
         question = questionRepository.save(question);
 
         // Find the question by ID

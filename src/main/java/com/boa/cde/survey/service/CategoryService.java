@@ -1,6 +1,6 @@
 package com.boa.cde.survey.service;
 
-import com.boa.cde.survey.domain.Category;
+import com.boa.cde.survey.entity.Category;
 import com.boa.cde.survey.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,13 @@ public class CategoryService {
         return categoryRepository.findById(id).orElse(null);
     }
 
-    public List<Category> getAllCategorys() {
+    public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    public List<Category> getAllCategoriesQuestionAndChoices(){
+        return null;
+       //return categoryRepository.findAllCategoriesWithQuestionsAndAnswerOptions();
     }
 
     public void deleteCategoryById(Long id) {

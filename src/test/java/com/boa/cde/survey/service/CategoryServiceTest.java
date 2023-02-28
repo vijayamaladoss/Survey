@@ -1,7 +1,6 @@
 package com.boa.cde.survey.service;
 
-import com.boa.cde.survey.domain.Category;
-import com.boa.cde.survey.service.CategoryService;
+import com.boa.cde.survey.entity.Category;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class CategoryServiceTest {
 
         Category createdCategory = categoryService.createCategory(category);
 
-        List<Category> categorys = categoryService.getAllCategorys();
+        List<Category> categorys = categoryService.getAllCategories();
 
         assertEquals(1, categorys.size());
         assertEquals(createdCategory.getName(), categorys.get(0).getName());
@@ -85,7 +83,7 @@ public class CategoryServiceTest {
 
         categoryService.deleteCategoryById(createdCategory.getId());
 
-        List<Category> categorys = categoryService.getAllCategorys();
+        List<Category> categorys = categoryService.getAllCategories();
 
         assertEquals(0, categorys.size());
     }

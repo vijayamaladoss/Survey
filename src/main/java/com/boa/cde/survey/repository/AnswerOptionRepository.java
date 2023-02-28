@@ -1,7 +1,7 @@
 package com.boa.cde.survey.repository;
 
-import com.boa.cde.survey.domain.AnswerOption;
-import com.boa.cde.survey.domain.Question;
+import com.boa.cde.survey.entity.AnswerOption;
+import com.boa.cde.survey.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public interface AnswerOptionRepository extends JpaRepository<AnswerOption, Long> {
     List<AnswerOption> findByQuestion(Question question);
     
-    AnswerOption findByText(String text);
+    AnswerOption findByAnswerText(String answerText);
 }

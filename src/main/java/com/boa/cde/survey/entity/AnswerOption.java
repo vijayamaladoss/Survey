@@ -1,10 +1,8 @@
-package com.boa.cde.survey.domain;
+package com.boa.cde.survey.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -17,10 +15,9 @@ public class AnswerOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
+    private String answerText;
 
-    @OneToMany(mappedBy = "dependentAnswerOption", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> dependentQuestions = new ArrayList<>();
+    private Boolean isDefault;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
